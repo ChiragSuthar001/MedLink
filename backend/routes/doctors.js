@@ -1,8 +1,6 @@
 import express from 'express';
 import { ObjectId } from 'mongodb';
 import { getDatabase } from '../database/connection.js';
-import { availibility } from '../middleware/pre_check.js';
-import { requireAuth, requireRole } from '../middleware/auth.js';
 
 const router = express.Router();
 
@@ -21,40 +19,6 @@ router.get('/specialties', async (req, res) => {
   }
 });
 
-router.post(
-  '/update-availability',
-  requireAuth,
-  requireRole('doctor'),
-  availibility,
-  async (req, res) => {
-    try {
-      const db = getDatabase();
-      const { availability } = req.body;
-
-      const { userId } = req.user;
-
-      if (await db.collection('availability').findOne({ userId })) {
-        await db
-          .collection('availability')
-          .updateOne({ userId }, { $set: { availability } });
-
-        return res
-          .status(200)
-          .json({ message: 'Availability updated successfully' });
-      }
-
-      await db.collection('availability').insertOne({
-        userId,
-        availability,
-      });
-
-      res.status(201).json({ message: 'Availability created successfully' });
-    } catch (error) {
-      console.error('Get availability error:', error);
-      res.status(500).json({ error: 'Internal server error' });
-    }
-  }
-);
 // Get all doctors (public - no auth required)
 router.get('/', async (req, res) => {
   try {

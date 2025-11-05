@@ -49,5 +49,6 @@ function availibility(req, res, next) {
 
   next();
 }
+const PreCheck = { availibility };
 
-export { availibility };
+export default PreCheck;

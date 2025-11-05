@@ -6,6 +6,8 @@ import cors from 'cors';
 import authRoutes from './routes/auth.js';
 import appointmentRoutes from './routes/appointments.js';
 import doctorRoutes from './routes/doctors.js';
+import doctorOnlyRoutes from './routes/doctor/doctor.js';
+import { requireAuth, requireRole } from './middleware/auth.js';
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -19,6 +21,7 @@ app.use(cors());
 app.use('/auth', authRoutes);
 app.use('/api/appointments', appointmentRoutes);
 app.use('/api/doctors', doctorRoutes);
+app.use('/api/doctor', requireAuth, requireRole('doctor'), doctorOnlyRoutes);
 
 // Root route
 app.get('/', (req, res) => {
@@ -37,6 +40,15 @@ app.get('/', (req, res) => {
 // Health check
 app.get('/health', (req, res) => {
   res.json({ status: 'ok' });
+});
+
+app.use('/**', (req, res) => {
+  console.error('Request:', req.method, req.baseUrl);
+  console.error('Body:', req.body);
+  console.error('Headers:', req.headers);
+  console.error('Params:', req.params);
+  console.error('Query:', req.query);
+  res.status(404).json({ error: 'Not found' });
 });
 
 // Error handling middleware

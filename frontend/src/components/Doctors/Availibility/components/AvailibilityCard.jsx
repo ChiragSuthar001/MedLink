@@ -1,54 +1,44 @@
 import PropTypes from 'prop-types';
-import { useEffect, useMemo, useState } from 'react';
-
+import { useMemo } from 'react';
 function generateTimeSlots(startHour, endHour) {
   const slots = [];
   for (let hour = startHour; hour < endHour; hour += 1) {
-    slots.push(`${hour}:00`);
-    slots.push(`${hour}:30`);
+    const hourStr = String(hour).padStart(2, '0');
+    slots.push(`${hourStr}:00`);
+    slots.push(`${hourStr}:30`);
   }
   return slots;
 }
 
 export default function AvailibilityCard({
   day,
-  getAvailability,
-  oldAvailability,
+  availability,
+  setNewAvailability,
 }) {
-  const slots = useMemo(() => generateTimeSlots(9, 17), []); // 9:00 to 16:30
-
-  const [availability, setAvailability] = useState(() => {
-    return oldAvailability || new Set();
-  });
+  const slots = useMemo(() => generateTimeSlots(9, 17), []); // 9:00 AM to 5:00 PM (17:00)
 
   const toggleSlot = (time) => {
-    setAvailability((prev) => {
-      const currentSet = new Set(prev);
-      if (currentSet.has(time)) {
-        currentSet.delete(time);
-      } else {
-        currentSet.add(time);
-      }
-      return currentSet;
-    });
+    const newSet = new Set(availability);
+    if (newSet.has(time)) {
+      newSet.delete(time);
+    } else {
+      newSet.add(time);
+    }
+    setNewAvailability(newSet);
   };
 
-  useEffect(() => {
-    getAvailability(() => availability);
-  });
-
   return (
-    <div key={day} className="day-card">
+    <div className="day-card">
       <div className="day-header">{day}</div>
       <div className="slots-grid">
         {slots.map((time) => {
-          const isSelected = availability[day].has(time);
+          const isSelected = availability.has(time);
           return (
             <button
               key={time}
               type="button"
               className={`slot-button ${isSelected ? 'selected' : ''}`}
-              onClick={() => toggleSlot(day, time)}
+              onClick={() => toggleSlot(time)}
             >
               {time}
             </button>
@@ -61,6 +51,6 @@ export default function AvailibilityCard({
 
 AvailibilityCard.propTypes = {
   day: PropTypes.string.isRequired,
-  getAvailability: PropTypes.func.isRequired,
-  oldAvailability: PropTypes.set.isRequired,
+  availability: PropTypes.object.isRequired,
+  setNewAvailability: PropTypes.func.isRequired,
 };

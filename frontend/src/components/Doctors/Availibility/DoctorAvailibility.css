@@ -1,5 +1,8 @@
 .doctor-availability {
   background: transparent;
+  height: 100%;
+  max-height: 80vh;
+  overflow: auto;
 }
 
 .availability-description {
@@ -7,18 +10,61 @@
   margin-bottom: 1rem;
 }
 
-.availability-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 1.25rem;
+.availability-cards-container {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: space-between;
+  align-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+.info-container {
+  position: sticky;
+  top: 0;
+  background: white;
+  padding: 1rem 0;
+  text-align: center;
+}
+
+.save-availability {
+  position: sticky;
+  bottom: 0;
+  background: white;
+  padding: 1rem 0;
+  text-align: right;
 }
 
 .day-card {
+  flex: 32%;
   background: #ffffff;
   border: 1px solid #e6e6e6;
   border-radius: 12px;
   padding: 1rem;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+}
+
+@media (max-width: 1020px) {
+  .day-card {
+    flex: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .doctor-layout {
+    flex-direction: column;
+    max-height: 70vh;
+    height: 70vh;
+  }
+
+  .doctor-menu-bar {
+    width: 100%;
+  }
+
+  .doctor-content {
+    width: 100%;
+  }
 }
 
 .day-header {
@@ -57,6 +103,28 @@
 .slot-button.selected:hover {
   background: #00a085;
   border-color: #00a085;
+}
+
+.save-button {
+  padding: 0.75rem 2rem;
+  background: #00b894;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.save-button:hover {
+  background: #00a085;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 184, 148, 0.3);
+}
+
+.save-button:active {
+  transform: translateY(0);
 }
 
 @media (min-width: 720px) {

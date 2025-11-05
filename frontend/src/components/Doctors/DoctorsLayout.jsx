@@ -15,25 +15,21 @@ function DoctorsLayout({ children }) {
   }
 
   function isActive(path) {
-    return location.pathname === path || location.pathname.startsWith(path + '/');
+    return (
+      location.pathname === path || location.pathname.startsWith(path + '/')
+    );
   }
 
   return (
-    <div className="patient-layout">
+    <div className="main-layout">
       {/* Brand name at top left */}
-      <div className="patient-brand">
-        <Link to="/doctor/dashboard" className="brand-link">
+      <div className="doctor-brand">
+        <Link to="/doctor/availability" className="brand-link">
           MedLink
         </Link>
       </div>
-
-      {/* Main content grid: 1, 4, 6, 1 */}
-      <div className="patient-content-grid">
-        {/* Left margin - empty */}
-        <div className="patient-left-margin"></div>
-
-        {/* Left sidebar menu - 4 units */}
-        <div className="patient-sidebar">
+      <div className="doctor-layout">
+        <div className="doctor-menu-bar">
           <div className="sidebar-welcome">
             Welcome back, {user?.name || 'User'}
           </div>
@@ -42,7 +38,7 @@ function DoctorsLayout({ children }) {
               to="/doctor/availability"
               className={`sidebar-nav-item ${isActive('/doctor/availability') ? 'active' : ''}`}
             >
-              Home
+              Availability
             </Link>
             <Link
               to="/doctor/upcoming-appointments"
@@ -56,19 +52,15 @@ function DoctorsLayout({ children }) {
             >
               Past Appointments
             </Link>
-            <button onClick={handleLogout} className="sidebar-nav-item sidebar-logout">
+            <button
+              onClick={handleLogout}
+              className="sidebar-nav-item sidebar-logout"
+            >
               Logout
             </button>
           </nav>
         </div>
-
-        {/* Right content area - 6 units */}
-        <div className="patient-content">
-          {children}
-        </div>
-
-        {/* Right margin - empty */}
-        <div className="patient-right-margin"></div>
+        <div className="doctor-content">{children}</div>
       </div>
     </div>
   );
@@ -79,4 +71,3 @@ DoctorsLayout.propTypes = {
 };
 
 export default DoctorsLayout;
-
