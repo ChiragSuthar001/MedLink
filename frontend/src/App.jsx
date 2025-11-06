@@ -19,6 +19,7 @@ import PrivateRoute from './components/Shared/PrivateRoute';
 import Navbar from './components/Shared/Navbar';
 import DoctorsLayout from './components/Doctors/DoctorsLayout';
 import DoctorAvailibility from './components/Doctors/Availibility/DoctorAvailibility';
+import UpcomingAppointments from './components/Doctors/UpcomingAppointments/UpcomingAppointments';
 
 function App() {
   return (
@@ -85,6 +86,10 @@ function App() {
                       <Route
                         path="availability"
                         element={<DoctorAvailibility />}
+                      />
+                      <Route
+                        path="upcoming-appointments"
+                        element={<UpcomingAppointments />}
                       />
                     </Routes>
                   </DoctorsLayout>

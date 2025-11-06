@@ -1,20 +1,45 @@
 import express from 'express';
 import PreCheck from '../../middleware/pre_check.js';
 import { getDatabase } from '../../database/connection.js';
+import { ObjectId } from 'mongodb';
 
 const router = express.Router();
+
+router.get('/upcoming-appointments', async (req, res) => {
+  try {
+    const db = getDatabase();
+    const { userId } = req.user;
+
+    const appointments = await db
+      .collection('appointments')
+      .find({ doctorId: userId, startDateTime: { $gte: new Date() } })
+      .sort({ startDateTime: 1 })
+      .toArray();
+
+    const appointmentsWithPatientName = await Promise.all(
+      appointments.map(async (appointment) => {
+        const patient = await db
+          .collection('users')
+          .findOne({ _id: new ObjectId(appointment.patientId) });
+
+        return {
+          ...appointment,
+          patientName: patient.name,
+        };
+      })
+    );
+
+    res.status(200).json({ appointments: appointmentsWithPatientName });
+  } catch (error) {
+    console.error('Get upcoming appointments error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
 
 router.get('/my-availability', async (req, res) => {
   try {
     const db = getDatabase();
     const { userId } = req.user;
-
-    // let userIdObjectId;
-    // try {
-    //   userIdObjectId = new ObjectId(String(userId));
-    // } catch (error) {
-    //   return res.status(400).json({ error: 'Invalid user ID' });
-    // }
 
     const availability = await db
       .collection('availability')
