@@ -24,7 +24,7 @@ function Login() {
       } else if (user.role === 'patient') {
         navigate('/patient/dashboard');
       } else if (user.role === 'doctor') {
-        navigate('/doctor/dashboard');
+        navigate('/doctor/availability');
       }
     }
   }, [user, navigate, location.state]);
@@ -60,7 +60,11 @@ function Login() {
   return (
     <div className="login-container">
       <div className="login-card">
-        <button className="back-button" onClick={handleBackToHome} aria-label="Back to home">
+        <button
+          className="back-button"
+          onClick={handleBackToHome}
+          aria-label="Back to home"
+        >
           ←
         </button>
         <div className="login-header">
@@ -188,4 +192,3 @@ function Login() {
 }
 
 export default Login;
-

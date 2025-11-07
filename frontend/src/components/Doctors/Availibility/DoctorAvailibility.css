@@ -1,0 +1,170 @@
+.doctor-availability {
+  background: transparent;
+  height: 100%;
+  max-height: 80vh;
+  overflow: auto;
+}
+
+.loading-spinner-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.5);
+  z-index: 9999;
+}
+.loading-spinner {
+  border: 6px solid #f3f3f3;
+  border-top: 6px solid #3498db;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.availability-description {
+  color: #666;
+  margin-bottom: 1rem;
+}
+
+.availability-cards-container {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: space-between;
+  align-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+.info-container {
+  position: sticky;
+  top: 0;
+  background: white;
+  padding: 1rem 0;
+  text-align: center;
+}
+
+.save-availability {
+  position: sticky;
+  bottom: 0;
+  background: white;
+  padding: 1rem 0;
+  text-align: right;
+}
+
+.day-card {
+  flex: 32%;
+  background: #ffffff;
+  border: 1px solid #e6e6e6;
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+}
+
+@media (max-width: 1020px) {
+  .day-card {
+    flex: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .doctor-layout {
+    flex-direction: column;
+    max-height: 70vh;
+    height: 70vh;
+  }
+
+  .doctor-menu-bar {
+    width: 100%;
+  }
+
+  .doctor-content {
+    width: 100%;
+  }
+}
+
+.day-header {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 0.75rem;
+}
+
+.slots-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+.slot-button {
+  padding: 0.6rem 0.5rem;
+  border: 1px solid #d9d9d9;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.15s ease-in-out;
+}
+
+.slot-button:hover {
+  border-color: #bfbfbf;
+  background: #fafafa;
+}
+
+.slot-button.selected {
+  background: #00b894;
+  color: #ffffff;
+  border-color: #00b894;
+}
+
+.slot-button.selected:hover {
+  background: #00a085;
+  border-color: #00a085;
+}
+
+.save-button {
+  padding: 0.75rem 2rem;
+  background: #00b894;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.save-button:hover {
+  background: #00a085;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 184, 148, 0.3);
+}
+
+.save-button:active {
+  transform: translateY(0);
+}
+
+@media (min-width: 720px) {
+  .availability-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (min-width: 1100px) {
+  .availability-grid {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}

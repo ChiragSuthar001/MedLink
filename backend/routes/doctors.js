@@ -1,7 +1,6 @@
-const express = require('express');
-const { ObjectId } = require('mongodb');
-const { getDatabase } = require('../database/connection');
-const { requireAuth } = require('../middleware/auth');
+import express from 'express';
+import { ObjectId } from 'mongodb';
+import { getDatabase } from '../database/connection.js';
 
 const router = express.Router();
 
@@ -12,7 +11,7 @@ router.get('/specialties', async (req, res) => {
     const specialties = await db
       .collection('users')
       .distinct('specialty', { role: 'doctor', specialty: { $ne: null } });
-    
+
     res.json(specialties.sort());
   } catch (error) {
     console.error('Get specialties error:', error);
@@ -25,7 +24,7 @@ router.get('/', async (req, res) => {
   try {
     const db = getDatabase();
     const { specialty } = req.query;
-    
+
     const query = { role: 'doctor' };
     if (specialty) {
       query.specialty = { $regex: specialty, $options: 'i' };
@@ -58,7 +57,9 @@ router.get('/:id/availability', async (req, res) => {
     const { date } = req.query;
 
     if (!date) {
-      return res.status(400).json({ error: 'Date parameter required (YYYY-MM-DD)' });
+      return res
+        .status(400)
+        .json({ error: 'Date parameter required (YYYY-MM-DD)' });
     }
 
     let doctorObjectId;
@@ -82,11 +83,14 @@ router.get('/:id/availability', async (req, res) => {
     nextDay.setDate(nextDay.getDate() + 1);
 
     // Get all appointments for this doctor on this date
-    const appointments = await db.collection('appointments').find({
-      doctorId: id,
-      startDateTime: { $gte: selectedDate, $lt: nextDay },
-      status: { $ne: 'cancelled' },
-    }).toArray();
+    const appointments = await db
+      .collection('appointments')
+      .find({
+        doctorId: id,
+        startDateTime: { $gte: selectedDate, $lt: nextDay },
+        status: { $ne: 'cancelled' },
+      })
+      .toArray();
 
     // Generate available 30-minute slots from 8 AM to 6 PM
     const slots = [];
@@ -142,5 +146,4 @@ router.get('/:id/availability', async (req, res) => {
   }
 });
 
-module.exports = router;
-
+export default router;

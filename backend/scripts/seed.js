@@ -1,6 +1,7 @@
-require('dotenv').config();
-const { MongoClient, ObjectId } = require('mongodb');
-const bcrypt = require('bcryptjs');
+import dotenv from 'dotenv';
+dotenv.config();
+import { MongoClient } from 'mongodb';
+import bcrypt from 'bcryptjs';
 
 const specialties = [
   'General Practice',
@@ -68,7 +69,11 @@ async function seed() {
         role: 'patient',
         name: `Patient ${i}`,
         phone: `555-${String(1000 + i).padStart(4, '0')}`,
-        dob: new Date(1970 + Math.floor(Math.random() * 40), Math.floor(Math.random() * 12), Math.floor(Math.random() * 28) + 1),
+        dob: new Date(
+          1970 + Math.floor(Math.random() * 40),
+          Math.floor(Math.random() * 12),
+          Math.floor(Math.random() * 28) + 1
+        ),
         createdAt: new Date(),
       };
       const result = await db.collection('users').insertOne(patient);
@@ -82,7 +87,29 @@ async function seed() {
         email: `doctor${i}@example.com`,
         hashedPassword,
         role: 'doctor',
-        name: `Dr. ${['Michael', 'Sarah', 'James', 'Emma', 'David', 'Lisa', 'Robert', 'Jennifer'][i % 8]} ${['Smith', 'Johnson', 'Williams', 'Brown', 'Jones', 'Garcia', 'Miller', 'Davis'][i % 8]}`,
+        name: `Dr. ${
+          [
+            'Michael',
+            'Sarah',
+            'James',
+            'Emma',
+            'David',
+            'Lisa',
+            'Robert',
+            'Jennifer',
+          ][i % 8]
+        } ${
+          [
+            'Smith',
+            'Johnson',
+            'Williams',
+            'Brown',
+            'Jones',
+            'Garcia',
+            'Miller',
+            'Davis',
+          ][i % 8]
+        }`,
         phone: `555-${String(2000 + i).padStart(4, '0')}`,
         specialty: specialties[i % specialties.length],
         createdAt: new Date(),
@@ -146,13 +173,22 @@ async function seed() {
     for (let i = 0; i < appointments.length; i += batchSize) {
       const batch = appointments.slice(i, i + batchSize);
       await db.collection('appointments').insertMany(batch);
-      console.log(`Inserted ${Math.min(i + batchSize, appointments.length)} appointments...`);
+      console.log(
+        `Inserted ${Math.min(
+          i + batchSize,
+          appointments.length
+        )} appointments...`
+      );
     }
 
     // Create indexes
     console.log('Creating indexes...');
-    await db.collection('appointments').createIndex({ patientId: 1, startDateTime: 1 });
-    await db.collection('appointments').createIndex({ doctorId: 1, startDateTime: 1 });
+    await db
+      .collection('appointments')
+      .createIndex({ patientId: 1, startDateTime: 1 });
+    await db
+      .collection('appointments')
+      .createIndex({ doctorId: 1, startDateTime: 1 });
     await db.collection('appointments').createIndex({ reason: 'text' });
 
     console.log(`\nSeed completed successfully!`);
@@ -171,4 +207,3 @@ async function seed() {
 }
 
 seed();
-

@@ -1,10 +1,13 @@
-require('dotenv').config();
-const express = require('express');
-const { connectToDatabase } = require('./database/connection');
-
-const authRoutes = require('./routes/auth');
-const appointmentRoutes = require('./routes/appointments');
-const doctorRoutes = require('./routes/doctors');
+import dotenv from 'dotenv';
+dotenv.config();
+import express from 'express';
+import { connectToDatabase } from './database/connection.js';
+import cors from 'cors';
+import authRoutes from './routes/auth.js';
+import appointmentRoutes from './routes/appointments.js';
+import doctorRoutes from './routes/doctors.js';
+import doctorOnlyRoutes from './routes/doctor/doctor.js';
+import { requireAuth, requireRole } from './middleware/auth.js';
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -12,10 +15,13 @@ const PORT = process.env.PORT || 3001;
 // Middleware
 app.use(express.json());
 
+app.use(cors());
+
 // Routes
 app.use('/auth', authRoutes);
 app.use('/api/appointments', appointmentRoutes);
 app.use('/api/doctors', doctorRoutes);
+app.use('/api/doctor', requireAuth, requireRole('doctor'), doctorOnlyRoutes);
 
 // Root route
 app.get('/', (req, res) => {
@@ -36,8 +42,17 @@ app.get('/health', (req, res) => {
   res.json({ status: 'ok' });
 });
 
+app.use('/**', (req, res) => {
+  console.error('Request:', req.method, req.baseUrl);
+  console.error('Body:', req.body);
+  console.error('Headers:', req.headers);
+  console.error('Params:', req.params);
+  console.error('Query:', req.query);
+  res.status(404).json({ error: 'Not found' });
+});
+
 // Error handling middleware
-app.use((err, req, res, next) => {
+app.use((err, _, res) => {
   console.error('Error:', err);
   res.status(500).json({ error: 'Internal server error' });
 });
@@ -56,4 +71,3 @@ async function startServer() {
 }
 
 startServer();
-

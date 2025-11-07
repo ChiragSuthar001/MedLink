@@ -1,0 +1,153 @@
+.cancel-modal-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  animation: fadein-modal-bg 0.3s ease forwards;
+}
+
+.cancel-modal-bg.hide {
+  opacity: 1;
+  animation: fadeout-modal-bg 0.3s ease forwards;
+}
+
+@keyframes fadein-modal-bg {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeout-modal-bg {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+.cancel-confirmation-modal {
+  height: fit-content;
+  width: 400px;
+  background: white;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
+  margin: auto;
+  opacity: 0;
+  transform: translateY(-50px);
+  animation: slidein-modal 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.cancel-confirmation-modal.hide {
+  animation: slideout-modal 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@keyframes slideout-modal {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-50px);
+  }
+}
+
+@keyframes slidein-modal {
+  from {
+    opacity: 0;
+    transform: translateY(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.cancel-confirmation-modal-description-warning {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #dc3545;
+  margin: 0 0 2rem 0;
+}
+
+.cancel-confirmation-modal-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #333;
+  margin: 0 0 1rem 0;
+  padding: 0;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-decoration: none;
+}
+
+.cancel-confirmation-modal-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #333;
+  margin: 0 0 1rem 0;
+}
+
+.cancel-confirmation-modal-description {
+  font-size: 1rem;
+  color: #666;
+  margin: 0 0 0.5rem 0;
+}
+
+.cancel-confirmation-modal-keep-button {
+  background: #00b894;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+
+.cancel-confirmation-modal-confirm-button {
+  background: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+
+.cancel-confirmation-modal-confirm-button:hover {
+  background: #c82333;
+}
+
+.cancel-confirmation-modal-confirm-button:active {
+  background: #a71d2a;
+}
+
+.cancel-confirmation-modal-keep-button:hover {
+  background: #00977b;
+}
+
+.cancel-confirmation-modal-keep-button:active {
+  background: #00856b;
+}
+
+.upcoming-appointment-card {
+  position: relative;
+}
