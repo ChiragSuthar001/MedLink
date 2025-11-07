@@ -47,8 +47,8 @@ function DoctorsLayout({ children }) {
               Upcoming Appointments
             </Link>
             <Link
-              to="/doctor/history"
-              className={`sidebar-nav-item ${isActive('/doctor/history') ? 'active' : ''}`}
+              to="/doctor/past-appointments"
+              className={`sidebar-nav-item ${isActive('/doctor/past-appointments') ? 'active' : ''}`}
             >
               Past Appointments
             </Link>

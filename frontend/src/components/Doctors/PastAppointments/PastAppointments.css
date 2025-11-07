@@ -1,0 +1,34 @@
+.appointment-reason {
+  color: #666;
+  margin-bottom: 0.25rem;
+}
+
+.appointment-date {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+.appointment-specialty {
+  color: #999;
+  font-size: 0.9rem;
+}
+
+.status-badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.status-upcoming {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.past-appointments {
+  max-height: 80vh;
+  height: 100%;
+  overflow: scroll;
+}

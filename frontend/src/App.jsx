@@ -20,6 +20,7 @@ import Navbar from './components/Shared/Navbar';
 import DoctorsLayout from './components/Doctors/DoctorsLayout';
 import DoctorAvailibility from './components/Doctors/Availibility/DoctorAvailibility';
 import UpcomingAppointments from './components/Doctors/UpcomingAppointments/UpcomingAppointments';
+import PastAppointments from './components/Doctors/PastAppointments/PastAppointments';
 
 function App() {
   return (
@@ -90,6 +91,10 @@ function App() {
                       <Route
                         path="upcoming-appointments"
                         element={<UpcomingAppointments />}
+                      />
+                      <Route
+                        path="past-appointments"
+                        element={<PastAppointments />}
                       />
                     </Routes>
                   </DoctorsLayout>
