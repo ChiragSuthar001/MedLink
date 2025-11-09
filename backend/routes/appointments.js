@@ -119,11 +119,14 @@ router.get('/', requireAuth, requireRole('patient'), async (req, res) => {
 
     const skip = (parseInt(page) - 1) * parseInt(limit);
 
+    const sortDirection =
+      status === 'upcoming' ? 1 : -1;
+
     const [appointments, total] = await Promise.all([
       db
         .collection('appointments')
         .find(query)
-        .sort({ startDateTime: -1 })
+        .sort({ startDateTime: sortDirection })
         .skip(skip)
         .limit(parseInt(limit))
         .toArray(),

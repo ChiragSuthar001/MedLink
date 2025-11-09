@@ -27,6 +27,17 @@ function AppointmentForm() {
     reason: '',
   });
 
+  function toInputValue(date) {
+    const tzOffset = date.getTimezoneOffset();
+    const local = new Date(date.getTime() - tzOffset * 60000);
+    return local.toISOString().slice(0, 16);
+  }
+
+  function convertUtcToLocalInput(utcString) {
+    if (!utcString) return '';
+    const date = new Date(utcString);
+    return toInputValue(date);
+  }
   const loadDoctors = useCallback(async () => {
     try {
       const data = await apiClient('/api/doctors');
@@ -51,12 +62,10 @@ function AppointmentForm() {
       const appointments = data.appointments || [];
       const appointment = appointments.find((apt) => apt.id === id);
       if (appointment) {
-        const start = new Date(appointment.startDateTime);
-        const end = new Date(appointment.endDateTime);
         setFormData({
           doctorId: appointment.doctorId,
-          startDateTime: start.toISOString().slice(0, 16),
-          endDateTime: end.toISOString().slice(0, 16),
+          startDateTime: convertUtcToLocalInput(appointment.startDateTime),
+          endDateTime: convertUtcToLocalInput(appointment.endDateTime),
           reason: appointment.reason || '',
         });
       }
@@ -78,13 +87,13 @@ function AppointmentForm() {
       if (doctorId && startDateTime && endDateTime) {
         setFormData({
           doctorId,
-          startDateTime: new Date(startDateTime).toISOString().slice(0, 16),
-          endDateTime: new Date(endDateTime).toISOString().slice(0, 16),
+          startDateTime: convertUtcToLocalInput(startDateTime),
+          endDateTime: convertUtcToLocalInput(endDateTime),
           reason: '',
         });
       }
     }
-  }, [id, isEdit, searchParams, loadAppointment, loadDoctors]);
+  }, [isEdit, loadAppointment, loadDoctors, searchParams]);
 
   function handleChange(e) {
     const { name, value } = e.target;
@@ -97,7 +106,7 @@ function AppointmentForm() {
       setFormData((prev) => ({
         ...prev,
         startDateTime: value,
-        endDateTime: end.toISOString().slice(0, 16),
+        endDateTime: toInputValue(end),
       }));
     }
   }
@@ -135,13 +144,10 @@ function AppointmentForm() {
   function handleSlotSelect(slot) {
     if (!slot.available) return;
 
-    const start = new Date(slot.start);
-    const end = new Date(slot.end);
-
     setFormData((prev) => ({
       ...prev,
-      startDateTime: start.toISOString().slice(0, 16),
-      endDateTime: end.toISOString().slice(0, 16),
+      startDateTime: convertUtcToLocalInput(slot.start),
+      endDateTime: convertUtcToLocalInput(slot.end),
     }));
 
     setShowTimeSlotModal(false);
@@ -317,9 +323,10 @@ function AppointmentForm() {
                   value={formData.startDateTime}
                   onChange={handleChange}
                   required
-                  min={new Date(Date.now() + 60 * 60 * 1000)
-                    .toISOString()
-                    .slice(0, 16)}
+                  min={
+                    formData.startDateTime ||
+                    toInputValue(new Date(Date.now() + 60 * 60 * 1000))
+                  }
                 />
               </div>
 
@@ -334,7 +341,7 @@ function AppointmentForm() {
                   required
                   min={
                     formData.startDateTime ||
-                    new Date().toISOString().slice(0, 16)
+                    toInputValue(new Date())
                   }
                 />
               </div>
