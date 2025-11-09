@@ -67,13 +67,21 @@ router.get('/current-appointment', async (req, res) => {
       doctorId: userId,
       startDateTime: { $lte: new Date() },
       endDateTime: { $gt: new Date() },
+      status: { $ne: 'no-show' },
     });
 
     if (!appointment) {
       return res.status(404).json({ error: 'No current appointment found' });
     }
 
-    res.status(200).json(appointment);
+    const patient = await db
+      .collection('users')
+      .findOne({ _id: new ObjectId(appointment.patientId) });
+
+    return res.status(200).json({
+      ...appointment,
+      patientName: patient.name,
+    });
   } catch (error) {
     console.error('Get current appointment error:', error);
     res.status(500).json({ error: 'Internal server error' });
