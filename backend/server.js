@@ -12,30 +12,22 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 
 // Middleware
-
 app.use((req, res, next) => {
-  const allowOrigin = process.env.FRONTEND_ORIGIN || 'http://localhost:3000';
-  // If Origin header is present and matches allowed, return it, otherwise block
-  const origin = req.headers.origin;
-  if (origin && origin === allowOrigin) {
-    res.setHeader('Access-Control-Allow-Origin', origin);
-  } else {
-    res.setHeader('Access-Control-Allow-Origin', allowOrigin);
-  }
-  res.setHeader(
+  res.header(
+    'Access-Control-Allow-Origin',
+    process.env.FRONTEND_ORIGIN || 'http://localhost:3000'
+  );
+  res.header(
     'Access-Control-Allow-Methods',
     'GET,POST,PUT,PATCH,DELETE,OPTIONS'
   );
-  res.setHeader(
+  res.header(
     'Access-Control-Allow-Headers',
     'Origin, X-Requested-With, Content-Type, Accept, Authorization'
   );
-  res.setHeader('Access-Control-Allow-Credentials', 'true');
-
+  res.header('Access-Control-Allow-Credentials', 'true');
   if (req.method === 'OPTIONS') {
-    // Preflight requests: quick response and abort pipeline
-    res.status(204).end();
-    return;
+    return res.sendStatus(204);
   }
   next();
 });
